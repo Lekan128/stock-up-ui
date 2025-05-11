@@ -1,0 +1,64 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input{
+    border: 0;
+    margin: 1.5px;
+}
+
+.text-field-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+  
+.text-field-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+  
+.input-field-container{
+    display: flex;
+    border: 1px solid #0A0A0A;
+    border-radius: 6px;
+    width: 100%;
+}
+
+.input-field-image{
+    display: flex;
+    object-fit: contain;
+    max-width: 24px;
+    max-height: 24px;
+    padding-left: 10px;
+    margin-right: 10px;
+    /* align-items: center; */
+    align-self: center;
+}
+
+.input-field-removed-image{
+    padding: 1px;
+    width: 0;
+    /* align-items: center; */
+}
+
+.text-field-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+  
+.text-field-input:focus {
+    border-color: #999;
+}
+  
+.text-field-hint {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.25rem;
+}

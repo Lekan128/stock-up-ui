@@ -1,0 +1,113 @@
+.container{
+    /* padding: var(--space-1) var(--space-1) var(--space-1) 0; */
+    /* margin: 0.4rem; */
+    border-radius: 0;
+    padding: var(--space-5);
+    background-color: white; 
+    border-color: var(--secondary-color);
+    border-width: var(--space-2);
+    border-style: solid;
+    margin: 0;
+    /* border-color: ;  */
+    color: var(--text-color-dark);  
+}
+
+/* .inner-container{
+    background-color: white;
+    margin: 0.2rem;
+} */
+
+.row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+
+    
+    /* max-width: 500px; */
+}
+
+.image {
+    width: 40px;
+    max-height: 50px;
+    border-radius: 9px;
+    object-fit: cover;
+    margin-right: var(--space-5);
+    /* margin-bottom: 1rem; */
+    /* position: static; */
+  }
+
+.product-name{
+    flex-grow: 1;
+    font-weight: var(--fw-5);
+}
+
+.description{
+    font-family: var(--font-light);
+    font-weight: var(--fw-4);
+}
+
+.expand-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    color: white;
+}
+
+.element-space{
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0.5rem ;
+    margin-right: 0.5rem ;
+}
+
+.product-info {
+    flex-grow: 1;
+}
+
+.expanded-content {
+    padding: 0 var(--space-10) var(--space-10) var(--space-10);
+    margin-top: 0.8rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.expanded-content-left {
+    width: 100%;
+    /* border-right: var(--space-2) solid var(--secondary-color); */
+    /* padding-right: var(--space-5); */
+}
+.expanded-content-button {
+    background-color: var(--secondary-color);
+    color: var(--text-color-green);
+    height: fit-content;
+    border: none;
+    margin-left: var(--space-20);
+    border-radius: var(--border-radius);
+    padding: var(--space-5) var(--space-20) var(--space-5) var(--space-20);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.detail-row span:first-child {
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .image {
+        width: 50px;
+        max-height: 60px;
+        border-radius: 9px;
+        /* margin-bottom: 1rem; */
+        /* position: static; */
+      }
+}
