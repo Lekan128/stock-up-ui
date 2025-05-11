@@ -1,0 +1,24 @@
+.header-container{
+    padding: 0.4rem;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    background-color: var(--primary-color);   
+    text-align: center; 
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    /* max-width: 500px; */
+}
+
+.element-charachter{
+    min-width: var(--space-40);
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0.5rem ;
+    margin-right: 0.5rem ;
+    color: #FFFFFF;
+    font-weight: bold;
+}

@@ -1,0 +1,55 @@
+.form-page {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    min-height: 100vh;
+    padding: 1rem;
+  }
+  
+  .form-logo {
+    width: 100px;
+    margin-bottom: 1rem;
+    position: static;
+  }
+  
+  .form-container {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .product-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .submit-btn {
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background-color: #065AD8;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsive Design */
+  @media (min-width: 768px) {
+    .form-page {
+      flex-direction: row;
+      padding: 0;
+    }
+  
+    .form-container {
+      flex: 1;
+      margin: 4rem;
+    }
+
+  }
+  
