@@ -18,6 +18,8 @@ const SignUp = () => {
     email: "",
     password: "",
     mobileNumber: "",
+    storeName: "",
+    storeAddress: "",
   });
 
   //
@@ -95,6 +97,19 @@ const SignUp = () => {
               placeholder="Mobile Number (optional)"
               onChange={handleChange}
               value={form.mobileNumber}
+            />
+            <TextField
+              name="storeName"
+              placeholder="Store Name"
+              onChange={handleChange}
+              value={form.storeName}
+              required
+            />
+            <TextField
+              name="storeAddress"
+              placeholder="Store Address (optional)"
+              onChange={handleChange}
+              value={form.storeAddress}
             />
             <button type="submit">Sign Up</button>
           </form>

@@ -7,11 +7,13 @@ import axiosInstance from "../utils/axiosInstance";
 import logo from "../assets/logo.png";
 import seatchIcon from "../assets/icons/search.png";
 import TextField from "../components/TextField";
-import AiProductItem from "../components/AiProductItem";
+import EditProductModal from "../components/EditProductModal";
 
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
+
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const [searchWord, setSearchWord] = useState<string>("");
   const handleProductClick = (product: Product) => {
@@ -37,6 +39,54 @@ const ProductList = () => {
         console.error("Error fetching products:", err);
         navigate("/login");
       });
+  };
+
+  const handleSaveProduct = async (
+    updatedProduct: Product,
+    newImageFile?: File
+  ) => {
+    try {
+      // First update product data
+      await axiosInstance.patch(`/products/${updatedProduct.id}`, {
+        name: updatedProduct.name,
+        numberAvailable: updatedProduct.numberAvailable,
+        costPrice: updatedProduct.costPrice,
+        sellingPrice: updatedProduct.sellingPrice,
+        description: updatedProduct.description,
+      });
+
+      // Then handle image upload if exists
+      if (newImageFile) {
+        const formData = new FormData();
+        formData.append("file", newImageFile);
+
+        const uploadResponse = await axiosInstance.post(
+          `/s3/upload/${updatedProduct.id}`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        await axiosInstance.patch(`/products/image/${updatedProduct.id}`, {
+          newImageUrl: uploadResponse.data,
+        });
+
+        updatedProduct.imageUrl = uploadResponse.data;
+      }
+
+      // Optimistic update
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === updatedProduct.id
+            ? {
+                ...updatedProduct,
+              }
+            : p
+        )
+      );
+    } catch (error) {
+      // Handle error (add error notification state here)
+      throw error;
+    }
   };
 
   return (
@@ -69,8 +119,17 @@ const ProductList = () => {
           key={product.id}
           product={product}
           onClick={(e) => handleProductClick(e)}
+          onEditClicked={(p) => setEditingProduct(p)}
         />
       ))}
+
+      {editingProduct && (
+        <EditProductModal
+          product={editingProduct}
+          onClose={() => setEditingProduct(null)}
+          onSave={handleSaveProduct}
+        />
+      )}
     </div>
   );
 };
