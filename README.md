@@ -57,4 +57,12 @@ export default tseslint.config({
 });
 ```
 
-> > > > > > > e3e4f07 (Initial commit)
+App enters in main.tsx,
+There is a root layout <RootLayout /> that contains the loading commponent <LoadingOverlay /> and then the <Outlet />
+
+main.txs has the <LoadingProvider> which helps with loading.
+
+To load on a screen add:
+const { showLoading, hideLoading } = useLoading();
+To actually show and hide the loader call
+showLoading() when you want to show the loader and hideLoading() when you want to hide the loader.
