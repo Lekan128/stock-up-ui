@@ -3,6 +3,7 @@ import { Product } from "../model/types";
 import "./EditProductModal.css";
 import TextField from "./TextField";
 import addImagePlaceHolder from "../assets/placeholders/add_image_placeholder.png";
+import { useLoading } from "../contexts/LoadingContext";
 
 interface EditProductModalProps {
   product: Product;
@@ -15,6 +16,7 @@ const EditProductModal = ({
   onClose,
   onSave,
 }: EditProductModalProps) => {
+  const { showLoading, hideLoading } = useLoading();
   const [editedProduct, setEditedProduct] = useState<Product>({ ...product });
   const [newImageFile, setNewImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>(
@@ -31,7 +33,9 @@ const EditProductModal = ({
 
   const handleSubmit = async () => {
     try {
+      showLoading();
       await onSave(editedProduct, newImageFile || undefined);
+      hideLoading();
       onClose();
     } catch (error) {
       // Handle error (you can add error state here)

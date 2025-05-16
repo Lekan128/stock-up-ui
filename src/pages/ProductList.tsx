@@ -8,8 +8,10 @@ import logo from "../assets/logo.png";
 import seatchIcon from "../assets/icons/search.png";
 import TextField from "../components/TextField";
 import EditProductModal from "../components/EditProductModal";
+import { useLoading } from "../contexts/LoadingContext";
 
 const ProductList = () => {
+  const { showLoading, hideLoading } = useLoading();
   const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
 
@@ -22,9 +24,13 @@ const ProductList = () => {
   };
 
   useEffect(() => {
+    showLoading();
     axiosInstance
       .get("/products")
-      .then((res) => setProducts(res.data))
+      .then((res) => {
+        setProducts(res.data);
+        hideLoading();
+      })
       .catch((err) => {
         console.error("Error fetching products:", err);
         navigate("/login");
@@ -66,11 +72,13 @@ const ProductList = () => {
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
+        const imageUrl = uploadResponse.data;
+
         await axiosInstance.patch(`/products/image/${updatedProduct.id}`, {
-          newImageUrl: uploadResponse.data,
+          imageUrl: imageUrl,
         });
 
-        updatedProduct.imageUrl = uploadResponse.data;
+        updatedProduct.imageUrl = imageUrl;
       }
 
       // Optimistic update
