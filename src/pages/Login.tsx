@@ -54,8 +54,8 @@ const Login = () => {
           <img src={logo} alt="Logo" className="form-logo" />
 
           <TextField
-            label="Email Address"
-            placeholder="johndoe@gmail.com"
+            label="Email address"
+            placeholder="Input your email"
             value={form.email}
             onChange={(e) => handleChange(e)}
             required={true}

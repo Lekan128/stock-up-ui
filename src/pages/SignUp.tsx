@@ -68,7 +68,7 @@ const SignUp = () => {
 
             <TextField
               name="firstName"
-              placeholder="First Name"
+              placeholder="First name"
               onChange={handleChange}
               value={form.firstName}
               leftImgSrc={personIcon}
@@ -77,7 +77,7 @@ const SignUp = () => {
 
             <TextField
               name="lastName"
-              placeholder="Last Name"
+              placeholder="Last name"
               onChange={handleChange}
               value={form.lastName}
               leftImgSrc={personIcon}
@@ -103,20 +103,20 @@ const SignUp = () => {
             />
             <TextField
               name="mobileNumber"
-              placeholder="Mobile Number (optional)"
+              placeholder="Mobile number (optional)"
               onChange={handleChange}
               value={form.mobileNumber}
             />
             <TextField
               name="storeName"
-              placeholder="Store Name"
+              placeholder="Store name"
               onChange={handleChange}
               value={form.storeName}
               required
             />
             <TextField
               name="storeAddress"
-              placeholder="Store Address (optional)"
+              placeholder="Store address (optional)"
               onChange={handleChange}
               value={form.storeAddress}
             />

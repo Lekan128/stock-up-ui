@@ -10,6 +10,7 @@ import TextField from "../components/TextField";
 import EditProductModal from "../components/EditProductModal";
 import { useLoading } from "../contexts/LoadingContext";
 import { useNotification } from "../contexts/NotificationContext";
+import NoProduct from "../components/NoProduct";
 
 const ProductList = () => {
   const { showLoading, hideLoading } = useLoading();
@@ -155,6 +156,8 @@ const ProductList = () => {
           onSave={handleSaveProduct}
         />
       )}
+
+      {!products.length && <NoProduct />}
     </div>
   );
 };
