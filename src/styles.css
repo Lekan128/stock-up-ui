@@ -25,6 +25,11 @@ body{
     display: none;
 }
 
+.root-layout {
+  position: relative;
+  min-height: 100vh;
+}
+
 @media (min-width: 48rem) {
   
     /* .side-image2 {

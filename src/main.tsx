@@ -11,37 +11,46 @@ import SignUp from "./pages/SignUp.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFound from "./pages/NotFound.tsx";
 import ProductList from "./pages/ProductList.tsx";
+import { LoadingProvider } from "./contexts/LoadingContext.tsx";
+import RootLayout from "./components/RootLayout.tsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <ProductList />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/products",
-    element: <ProductList />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/addProduct",
-    element: <ProductForm />,
-    errorElement: <NotFound />,
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/",
+        element: <ProductList />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/products",
+        element: <ProductList />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/signup",
+        element: <SignUp />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/addProduct",
+        element: <ProductForm />,
+        errorElement: <NotFound />,
+      },
+    ],
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <LoadingProvider>
+      <RouterProvider router={router} />
+    </LoadingProvider>
   </StrictMode>
 );
