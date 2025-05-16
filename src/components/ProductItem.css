@@ -28,9 +28,9 @@
 }
 
 .image {
-    width: 40px;
-    max-height: 50px;
-    border-radius: 9px;
+    width: var(--img-width-sm);
+    max-height: var(--img-max-height-sm);
+    border-radius: var(--border-radius-sm);
     object-fit: cover;
     margin-right: var(--space-5);
     /* margin-bottom: 1rem; */
@@ -104,9 +104,9 @@
 /* Responsive Design */
 @media (min-width: 768px) {
     .image {
-        width: 50px;
-        max-height: 60px;
-        border-radius: 9px;
+        width: var(--img-width-big);
+        max-height: var(--img-max-height-big);
+        border-radius: var(--border-radius-sm);
         /* margin-bottom: 1rem; */
         /* position: static; */
       }

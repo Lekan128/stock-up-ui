@@ -7,9 +7,14 @@ import arrowDownIcon from "../assets/icons/arrow-down.png";
 interface ProductViewProps {
   product: Product;
   onClick: (product: Product) => void;
+  onEditClicked: (product: Product) => void;
 }
 
-const ProductItem: React.FC<ProductViewProps> = ({ product, onClick }) => {
+const ProductItem: React.FC<ProductViewProps> = ({
+  product,
+  onClick,
+  onEditClicked,
+}) => {
   const {
     imageUrl,
     name,
@@ -31,6 +36,11 @@ const ProductItem: React.FC<ProductViewProps> = ({ product, onClick }) => {
     setIsExpanded(!isExpanded);
   };
 
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEditClicked(product);
+  };
+
   return (
     <div className="container" onClick={() => onClick(product)}>
       <div className="inner-container">
@@ -43,7 +53,7 @@ const ProductItem: React.FC<ProductViewProps> = ({ product, onClick }) => {
           </div>
 
           <button className="expand-button" onClick={toggleExpand}>
-            <img src={isExpanded ? arrowDownIcon : arrowUpIcon} />
+            <img src={isExpanded ? arrowUpIcon : arrowDownIcon} />
           </button>
 
           {/* <p className="product-name element-space">{name}</p>
@@ -71,7 +81,10 @@ const ProductItem: React.FC<ProductViewProps> = ({ product, onClick }) => {
                 <span className="value">{category?.name}</span>
               </div>
             </div>
-            <button className="expanded-content-button">
+            <button
+              className="expanded-content-button"
+              onClick={handleEditClick}
+            >
               <span>Edit</span>
             </button>
           </div>
