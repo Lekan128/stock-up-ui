@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound.tsx";
 import ProductList from "./pages/ProductList.tsx";
 import { LoadingProvider } from "./contexts/LoadingContext.tsx";
 import RootLayout from "./components/RootLayout.tsx";
+import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -49,8 +50,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <LoadingProvider>
-      <RouterProvider router={router} />
-    </LoadingProvider>
+    <NotificationProvider>
+      <LoadingProvider>
+        <RouterProvider router={router} />
+      </LoadingProvider>
+    </NotificationProvider>
   </StrictMode>
 );

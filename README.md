@@ -66,3 +66,10 @@ To load on a screen add:
 const { showLoading, hideLoading } = useLoading();
 To actually show and hide the loader call
 showLoading() when you want to show the loader and hideLoading() when you want to hide the loader.
+
+To add notification:
+const { showNotification } = useNotification();
+use showNotification().
+
+then showNotification: (message: string, type: NotificationType)
+type NotificationType = "success" | "error" | "info";
