@@ -8,9 +8,13 @@ import emailIcon from "../assets/icons/email.png";
 import passwordIcon from "../assets/icons/lock.png";
 import personIcon from "../assets/icons/person.png";
 import { endpoints } from "../api/config";
+import { useLoading } from "../contexts/LoadingContext";
+import { useNotification } from "../contexts/NotificationContext";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
+  const { showNotification } = useNotification();
 
   const [form, setForm] = useState({
     firstName: "",
@@ -30,13 +34,18 @@ const SignUp = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    showLoading();
     try {
       const res = await axios.post(endpoints.register, form);
       localStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
+      hideLoading();
+      showNotification("Wellcome", "success");
       navigate("/products"); // reference to product list page
     } catch (err) {
+      hideLoading();
       console.error("Signup failed", err);
+      showNotification("Error: " + err, "error");
     }
   };
 

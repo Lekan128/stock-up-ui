@@ -9,9 +9,12 @@ import seatchIcon from "../assets/icons/search.png";
 import TextField from "../components/TextField";
 import EditProductModal from "../components/EditProductModal";
 import { useLoading } from "../contexts/LoadingContext";
+import { useNotification } from "../contexts/NotificationContext";
 
 const ProductList = () => {
   const { showLoading, hideLoading } = useLoading();
+  const { showNotification } = useNotification();
+
   const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
 
@@ -20,7 +23,8 @@ const ProductList = () => {
   const [searchWord, setSearchWord] = useState<string>("");
   const handleProductClick = (product: Product) => {
     //Todo: undo
-    navigate("/product", { state: { product } });
+    // navigate("/product", { state: { product } });
+    showNotification("Coming soon", "info");
   };
 
   useEffect(() => {
@@ -33,21 +37,31 @@ const ProductList = () => {
       })
       .catch((err) => {
         console.error("Error fetching products:", err);
+        showNotification(
+          "An error occoured, please login\n Error: " + err,
+          "error"
+        );
         navigate("/login");
       });
   }, []);
 
   const handleSearch = () => {
+    showLoading();
     axiosInstance
       .get("/products?search=" + searchWord)
-      .then((res) => setProducts(res.data))
+      .then((res) => {
+        setProducts(res.data);
+        hideLoading();
+      })
       .catch((err) => {
+        hideLoading();
         console.error("Error fetching products:", err);
-        navigate("/login");
+        showNotification("Error: " + err, "error");
       });
   };
 
   const handleSaveProduct = async (
+    //Loading managed by EditProductModal
     updatedProduct: Product,
     newImageFile?: File
   ) => {
@@ -91,8 +105,11 @@ const ProductList = () => {
             : p
         )
       );
+
+      showNotification("Product saved", "success");
     } catch (error) {
-      // Handle error (add error notification state here)
+      showNotification("Error: " + error, "error");
+      hideLoading();
       throw error;
     }
   };
