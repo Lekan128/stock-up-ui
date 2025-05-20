@@ -5,8 +5,13 @@ import logo from "../assets/logo.png"; // your logo file
 import axiosInstance from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import SideContent from "../components/SideContent";
+import { useLoading } from "../contexts/LoadingContext";
+import { useNotification } from "../contexts/NotificationContext";
 
 const ProductForm: React.FC = () => {
+  const { showLoading, hideLoading } = useLoading();
+  const { showNotification } = useNotification();
+
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -18,6 +23,7 @@ const ProductForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    showLoading();
     // if {isSubmitting} return;
     setIsSubmitting(true);
 
@@ -55,16 +61,22 @@ const ProductForm: React.FC = () => {
         await axiosInstance.patch(`/products/image/${productId}`, { imageUrl });
       }
 
+      hideLoading();
+
       // Navigate to products page
       //   window.location.href = "/products";
       navigate("/products");
     } catch (error) {
       console.error("Error submitting product:", error);
+      hideLoading();
+      showNotification("Error: " + error, "error");
       alert("Error submitting product. Please try again.");
     } finally {
+      hideLoading();
       setIsSubmitting(false);
     }
   };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);

@@ -7,8 +7,13 @@ import TextField from "../components/TextField";
 import emailIcon from "../assets/icons/email.png";
 import passwordIcon from "../assets/icons/lock.png";
 import logo from "../assets/logo.png";
+import { useLoading } from "../contexts/LoadingContext";
+import { useNotification } from "../contexts/NotificationContext";
 
 const Login = () => {
+  const { showLoading, hideLoading } = useLoading();
+  const { showNotification } = useNotification();
+
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
@@ -18,13 +23,18 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    showLoading();
     try {
       const res = await axios.post(endpoints.login, form);
       localStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
+      hideLoading();
+      showNotification("Wellcome back", "success");
       navigate("/products");
     } catch (err) {
+      hideLoading();
       console.error("Login failed", err);
+      showNotification("Error: " + err, "error");
     }
   };
 
@@ -44,8 +54,8 @@ const Login = () => {
           <img src={logo} alt="Logo" className="form-logo" />
 
           <TextField
-            label="Email Address"
-            placeholder="johndoe@gmail.com"
+            label="Email address"
+            placeholder="Input your email"
             value={form.email}
             onChange={(e) => handleChange(e)}
             required={true}

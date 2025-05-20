@@ -1,0 +1,12 @@
+.no-product-container{
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color-grey);
+    align-items: center;
+    width: 100%;
+    padding-top: var(--space-60);
+}
+
+.no-product-image{
+    max-width: 40%;
+}
