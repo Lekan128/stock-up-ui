@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductItem from "../components/ProductItem";
 import "./ProductList.css";
 import { Product } from "../model/types";
@@ -24,7 +24,9 @@ const ProductList = () => {
   const [searchWord, setSearchWord] = useState<string>("");
   const handleProductClick = (product: Product) => {
     //Todo: undo
-    // navigate("/product", { state: { product } });
+    if (false) {
+      navigate("/product", { state: { product } });
+    }
     showNotification("Coming soon", "info");
   };
 

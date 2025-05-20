@@ -1,4 +1,3 @@
-import React from "react";
 import "../pages/ProductForm.css";
 
 const SideContent = () => {
