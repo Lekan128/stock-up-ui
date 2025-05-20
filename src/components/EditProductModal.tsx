@@ -44,7 +44,7 @@ const EditProductModal = ({
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <form className="modal-content" onSubmit={handleSubmit}>
         <div className="image-upload-section">
           <input
             type="file"
@@ -116,17 +116,18 @@ const EditProductModal = ({
               numberAvailable: Number(e.target.value),
             })
           }
+          required
         />
 
         <div className="modal-actions">
           <button className="button cancel-button" onClick={onClose}>
             Cancel
           </button>
-          <button className="button save-button" onClick={handleSubmit}>
+          <button className="button save-button" type="submit">
             Save
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

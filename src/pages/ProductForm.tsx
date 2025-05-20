@@ -146,6 +146,7 @@ const ProductForm: React.FC = () => {
             value={stock}
             placeholder="50"
             onChange={(e) => setStock(e.target.value)}
+            required
           />
           <button type="submit" className="submit-btn">
             {isSubmitting ? "Processing..." : "Add Product"}
