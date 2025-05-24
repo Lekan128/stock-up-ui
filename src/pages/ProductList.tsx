@@ -40,10 +40,8 @@ const ProductList = () => {
       })
       .catch((err) => {
         console.error("Error fetching products:", err);
-        showNotification(
-          "An error occoured, please login\n Error: " + err,
-          "error"
-        );
+        showNotification("Login", "info");
+        hideLoading();
         navigate("/login");
       });
   }, []);
@@ -111,6 +109,7 @@ const ProductList = () => {
 
       showNotification("Product saved", "success");
     } catch (error) {
+      console.log(error);
       showNotification("Error: " + error, "error");
       hideLoading();
       throw error;
