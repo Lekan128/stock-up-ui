@@ -109,6 +109,7 @@ const ProductList = () => {
 
       showNotification("Product saved", "success");
     } catch (error) {
+      console.log(error);
       showNotification("Error: " + error, "error");
       hideLoading();
       throw error;
