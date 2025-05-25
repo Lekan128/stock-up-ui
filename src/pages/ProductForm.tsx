@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SideContent from "../components/SideContent";
 import { useLoading } from "../contexts/LoadingContext";
 import { useNotification } from "../contexts/NotificationContext";
+import { AxiosError } from "axios";
 
 const ProductForm: React.FC = () => {
   const { showLoading, hideLoading } = useLoading();
@@ -69,8 +70,14 @@ const ProductForm: React.FC = () => {
     } catch (error) {
       console.error("Error submitting product:", error);
       hideLoading();
+      if (error instanceof AxiosError) {
+        showNotification(
+          "Error: " + error.response?.data.errorMessage,
+          "error"
+        );
+        return;
+      }
       showNotification("Error: " + error, "error");
-      alert("Error submitting product. Please try again.");
     } finally {
       hideLoading();
       setIsSubmitting(false);

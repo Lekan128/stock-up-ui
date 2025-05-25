@@ -11,6 +11,7 @@ import EditProductModal from "../components/EditProductModal";
 import { useLoading } from "../contexts/LoadingContext";
 import { useNotification } from "../contexts/NotificationContext";
 import NoProduct from "../components/NoProduct";
+import { AxiosError } from "axios";
 
 const ProductList = () => {
   const { showLoading, hideLoading } = useLoading();
@@ -110,8 +111,18 @@ const ProductList = () => {
       showNotification("Product saved", "success");
     } catch (error) {
       console.log(error);
-      showNotification("Error: " + error, "error");
+      console.error("Login failed", error);
       hideLoading();
+
+      if (error instanceof AxiosError) {
+        showNotification(
+          "Error: " + error.response?.data.errorMessage,
+          "error"
+        );
+        return;
+      } else {
+        showNotification("Error: " + error, "error");
+      }
       throw error;
     }
   };
