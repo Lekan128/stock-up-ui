@@ -31,13 +31,15 @@ const EditProductModal = ({
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       showLoading();
       await onSave(editedProduct, newImageFile || undefined);
       hideLoading();
       onClose();
     } catch (error) {
+      console.log(error);
       // Handle error (you can add error state here)
     }
   };
