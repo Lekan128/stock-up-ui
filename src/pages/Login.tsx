@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import "./../components/AuthForm.css";
 import { endpoints } from "../api/config";
@@ -34,6 +34,10 @@ const Login = () => {
     } catch (err) {
       hideLoading();
       console.error("Login failed", err);
+      if (err instanceof AxiosError) {
+        showNotification("Error: " + err.response?.data.errorMessage, "error");
+        return;
+      }
       showNotification("Error: " + err, "error");
     }
   };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import "./../components/AuthForm.css";
 import logo from "../assets/logo.png";
@@ -45,6 +45,10 @@ const SignUp = () => {
     } catch (err) {
       hideLoading();
       console.error("Signup failed", err);
+      if (err instanceof AxiosError) {
+        showNotification("Error: " + err.response?.data.errorMessage, "error");
+        return;
+      }
       showNotification("Error: " + err, "error");
     }
   };
