@@ -103,6 +103,8 @@ const ProductList = () => {
 
       // Then handle image upload if exists
       if (newImageFile) {
+        showNotification("Product Updated! Uploading Image", "success");
+
         const formData = new FormData();
         formData.append("file", newImageFile);
 
