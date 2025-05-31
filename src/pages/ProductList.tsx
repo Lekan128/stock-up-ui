@@ -114,9 +114,9 @@ const ProductList = () => {
 
         const imageUrl = uploadResponse.data;
 
-        await axiosInstance.patch(`/products/image/${updatedProduct.id}`, {
-          imageUrl: imageUrl,
-        });
+        // await axiosInstance.patch(`/products/image/${updatedProduct.id}`, {
+        //   imageUrl: imageUrl,
+        // });
 
         updatedProduct.imageUrl = imageUrl;
       }
