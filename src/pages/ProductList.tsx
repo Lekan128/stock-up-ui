@@ -103,6 +103,8 @@ const ProductList = () => {
 
       // Then handle image upload if exists
       if (newImageFile) {
+        showNotification("Product Updated! Uploading Image", "success");
+
         const formData = new FormData();
         formData.append("file", newImageFile);
 
@@ -112,13 +114,7 @@ const ProductList = () => {
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
-        const imageUrl = uploadResponse.data;
-
-        await axiosInstance.patch(`/products/image/${updatedProduct.id}`, {
-          imageUrl: imageUrl,
-        });
-
-        updatedProduct.imageUrl = imageUrl;
+        updatedProduct.imageUrl = uploadResponse.data;
       }
 
       // Optimistic update
