@@ -112,13 +112,7 @@ const ProductList = () => {
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
-        const imageUrl = uploadResponse.data;
-
-        // await axiosInstance.patch(`/products/image/${updatedProduct.id}`, {
-        //   imageUrl: imageUrl,
-        // });
-
-        updatedProduct.imageUrl = imageUrl;
+        updatedProduct.imageUrl = uploadResponse.data;
       }
 
       // Optimistic update
