@@ -47,6 +47,30 @@ const ProductList = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (editingProduct) {
+      // Push a new state to history when modal is opened
+      window.history.pushState({ modalOpen: true }, "");
+
+      // Listen for back/forward button
+      const handlePopState = (_: PopStateEvent) => {
+        setEditingProduct(null);
+      };
+
+      window.addEventListener("popstate", handlePopState);
+
+      // Cleanup when modal closes
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+
+        // Go back one history step so that the URL is back to what it was
+        if (window.history.state?.modalOpen) {
+          window.history.back();
+        }
+      };
+    }
+  }, [editingProduct]);
+
   const handleSearch = () => {
     showLoading();
     axiosInstance
