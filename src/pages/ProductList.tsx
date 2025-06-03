@@ -47,6 +47,30 @@ const ProductList = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (editingProduct) {
+      // Push a new state to history when modal is opened
+      window.history.pushState({ modalOpen: true }, "");
+
+      // Listen for back/forward button
+      const handlePopState = (_: PopStateEvent) => {
+        setEditingProduct(null);
+      };
+
+      window.addEventListener("popstate", handlePopState);
+
+      // Cleanup when modal closes
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+
+        // Go back one history step so that the URL is back to what it was
+        if (window.history.state?.modalOpen) {
+          window.history.back();
+        }
+      };
+    }
+  }, [editingProduct]);
+
   const handleSearch = () => {
     showLoading();
     axiosInstance
@@ -79,6 +103,8 @@ const ProductList = () => {
 
       // Then handle image upload if exists
       if (newImageFile) {
+        showNotification("Product Updated! Uploading Image", "success");
+
         const formData = new FormData();
         formData.append("file", newImageFile);
 
@@ -88,13 +114,7 @@ const ProductList = () => {
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
-        const imageUrl = uploadResponse.data;
-
-        await axiosInstance.patch(`/products/image/${updatedProduct.id}`, {
-          imageUrl: imageUrl,
-        });
-
-        updatedProduct.imageUrl = imageUrl;
+        updatedProduct.imageUrl = uploadResponse.data;
       }
 
       // Optimistic update

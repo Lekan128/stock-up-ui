@@ -43,23 +43,16 @@ const ProductForm: React.FC = () => {
 
       // Step 2: Upload image if exists
       if (imageFile) {
+        showNotification("Product updated, uploading image", "success");
+
         const formData = new FormData();
         formData.append("file", imageFile);
 
-        const uploadResponse = await axiosInstance.post(
-          `/s3/upload/${productId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        const imageUrl = uploadResponse.data;
-
-        // Step 3: Update product with image URL
-        await axiosInstance.patch(`/products/image/${productId}`, { imageUrl });
+        await axiosInstance.post(`/s3/upload/${productId}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       }
 
       hideLoading();
