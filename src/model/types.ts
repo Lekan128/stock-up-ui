@@ -17,3 +17,10 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface ProductShort {
+  name: string;
+  costPrice: number;
+  sellingPrice: number;
+  numberAvailable: number; //sku
+}

@@ -11,14 +11,16 @@ import ProductList from "./pages/ProductList.tsx";
 import { LoadingProvider } from "./contexts/LoadingContext.tsx";
 import RootLayout from "./components/RootLayout.tsx";
 import { NotificationProvider } from "./contexts/NotificationContext.tsx";
+import AddProductListPage from "./pages/AddProductListPage.tsx";
 
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
       {
+        // Todo: undo to element: <ProductList />,
         path: "/",
-        element: <ProductList />,
+        element: <AddProductListPage />,
         errorElement: <NotFound />,
       },
       {

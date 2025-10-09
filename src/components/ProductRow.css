@@ -1,0 +1,34 @@
+.product-line-container {
+  display: flex;
+  align-items: center
+  
+}
+
+.product-line {
+  flex: 1; 
+}
+.product-line-big {
+  flex: 2.5; 
+}
+.product-line-small {
+  flex: 0.5; 
+}
+.close-btn{
+    /* Basic button styling */
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  /* Small red "x" */
+  color: red;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1; /* Prevents additional space from increasing button size */
+
+  /* Optional: Remove the default button padding */
+  padding: 3;
+  margin: 0;
+  height: min-content; /* Ensure height only fits content */
+  width: min-content;  /* Ensure width only fits content */
+  text-align: center;
+}
