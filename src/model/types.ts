@@ -18,7 +18,8 @@ export interface Product {
   updatedAt?: string;
 }
 
-export interface ProductShort {
+export interface ProductRowDetail {
+  rowId: string; // unique identifier for the row
   name: string;
   costPrice: number;
   sellingPrice: number;

@@ -1,53 +1,85 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductRow from "../components/ProductRow";
-import { ProductShort } from "../model/types";
+import { ProductRowDetail } from "../model/types";
 // import ProductRow, { ProductShort } from "./ProductRow";
 
 const AddProductListPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const emptyRow = (): ProductShort => ({
+  const emptyRow = (): ProductRowDetail => ({
+    rowId: crypto.randomUUID(),
     name: "",
     costPrice: 0,
     sellingPrice: 0,
     numberAvailable: 0,
   });
 
-  const [products, setProducts] = useState<ProductShort[]>([
+  const [productRows, setProductRows] = useState<ProductRowDetail[]>([
     emptyRow(),
     emptyRow(),
     emptyRow(),
     emptyRow(),
   ]);
 
-  const handleChange = (index: number, updated: ProductShort) => {
-    setProducts((prev) => {
-      const newArr = [...prev];
-      newArr[index] = updated;
+  const handleChange = (rowId: string, updated: ProductRowDetail) => {
+    setProductRows((prev) => {
+      let changedRowWasSecondToLast = false;
 
-      // if user typed something non-empty into the second-to-last of old array
-      if (index === prev.length - 2 && updated.name.trim() !== "") {
-        newArr.push(emptyRow()); // add 1 new row
+      const newArr = prev.map((currentRow, idx) => {
+        if (currentRow.rowId === rowId) {
+          // If this row was second to last in the old array
+          if (idx === prev.length - 2) {
+            changedRowWasSecondToLast = true;
+          }
+          return { ...updated, rowId };
+        }
+        return currentRow;
+      });
+
+      if (changedRowWasSecondToLast && updated.name.trim() !== "") {
+        //When the second to the last row is updated a new row is added
+        newArr.push(emptyRow());
       }
 
       return newArr;
     });
   };
 
-  const handleRemove = (index: number) => {
-    setProducts((prev) => {
+  //   const handleChange = (index: number, updated: ProductRowDetail) => {
+  //     setProducts((prev) => {
+  //       const newArr = [...prev];
+  //       newArr[index] = updated;
+
+  //       // if user typed something non-empty into the second-to-last of old array
+  //       if (index === prev.length - 2 && updated.name.trim() !== "") {
+  //         newArr.push(emptyRow()); // add 1 new row
+  //       }
+
+  //       return newArr;
+  //     });
+  //   };
+
+  const handleRemove = (rowId: string) => {
+    setProductRows((prev) => {
       if (prev.length <= 1) return prev;
-      return prev.filter((_, i) => i !== index);
+      return prev.filter((row) => row.rowId !== rowId);
     });
   };
 
+  //   const handleRemove = (index: number) => {
+  //     setProducts((prev) => {
+  //       if (prev.length <= 1) return prev;
+  //       return prev.filter((_, i) => i !== index);
+  //     });
+  //   };
+
   const handleAdd = () => {
-    setProducts((prev) => [...prev, emptyRow()]);
+    setProductRows((prev) => [...prev, emptyRow()]);
   };
 
   const handleSave = () => {
-    const toSave = products.filter((p) => p.name.trim() !== "");
+    const toSave = productRows.filter((p) => p.name.trim() !== "");
     console.log("Saving these products:", toSave);
   };
 
@@ -59,12 +91,12 @@ const AddProductListPage: React.FC = () => {
     <div className="add-product-list-page">
       <h2>Add Products</h2>
       <div className="product-list-rows">
-        {products.map((prod, idx) => (
+        {productRows.map((prodRow) => (
           <ProductRow
-            key={idx}
-            product={prod}
-            onChange={(updated) => handleChange(idx, updated)}
-            onRemove={() => handleRemove(idx)}
+            key={prodRow.rowId}
+            product={prodRow}
+            onChange={(updated) => handleChange(prodRow.rowId, updated)}
+            onRemove={() => handleRemove(prodRow.rowId)}
           />
         ))}
       </div>

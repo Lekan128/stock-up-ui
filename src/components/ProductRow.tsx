@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import TextField from "./TextField";
 import "./ProductRow.css";
-import { ProductShort } from "../model/types";
+import { ProductRowDetail } from "../model/types";
 
 interface ProductRowProps {
-  product: ProductShort;
-  onChange: (product: ProductShort) => void;
+  product: ProductRowDetail;
+  onChange: (product: ProductRowDetail) => void;
   onRemove: () => void;
 }
 
@@ -14,16 +14,16 @@ const ProductRow: React.FC<ProductRowProps> = ({
   onChange,
   onRemove,
 }) => {
-  const [localProduct, setLocalProduct] = useState<ProductShort>(product);
+  const [localProduct, setLocalProduct] = useState<ProductRowDetail>(product);
 
   // Whenever localProduct changes, notify parent
   useEffect(() => {
     onChange(localProduct);
   }, [localProduct]);
 
-  const updateField = <K extends keyof ProductShort>(
+  const updateField = <K extends keyof ProductRowDetail>(
     field: K,
-    value: ProductShort[K]
+    value: ProductRowDetail[K]
   ) => {
     setLocalProduct((prev) => ({
       ...prev,
