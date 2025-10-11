@@ -21,7 +21,7 @@ export interface Product {
 export interface ProductRowDetail {
   rowId: string; // unique identifier for the row
   name: string;
-  costPrice: number;
-  sellingPrice: number;
-  numberAvailable: number; //sku
+  costPrice: number | "";
+  sellingPrice: number | "";
+  numberAvailable: number | ""; //sku
 }
