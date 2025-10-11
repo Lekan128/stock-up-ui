@@ -12,9 +12,9 @@ const AddProductListPage: React.FC = () => {
   const emptyRow = (): ProductRowDetail => ({
     rowId: crypto.randomUUID(),
     name: "",
-    costPrice: 0,
-    sellingPrice: 0,
-    numberAvailable: 0,
+    costPrice: "",
+    sellingPrice: "",
+    numberAvailable: "",
   });
 
   const [productRows, setProductRows] = useState<ProductRowDetail[]>([
