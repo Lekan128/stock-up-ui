@@ -26,20 +26,20 @@ const AddProductListPage: React.FC = () => {
 
   const handleChange = (rowId: string, updated: ProductRowDetail) => {
     setProductRows((prev) => {
-      let changedRowWasSecondToLast = false;
+      let lastRowChanged = false;
 
       const newArr = prev.map((currentRow, idx) => {
         if (currentRow.rowId === rowId) {
-          // If this row was second to last in the old array
-          if (idx === prev.length - 2) {
-            changedRowWasSecondToLast = true;
+          // If this row was last in the old array
+          if (idx === prev.length - 1) {
+            lastRowChanged = true;
           }
           return { ...updated, rowId };
         }
         return currentRow;
       });
 
-      if (changedRowWasSecondToLast && updated.name.trim() !== "") {
+      if (lastRowChanged && updated.name.trim() !== "") {
         //When the second to the last row is updated a new row is added
         newArr.push(emptyRow());
       }
