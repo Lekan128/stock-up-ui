@@ -1,7 +1,7 @@
 .product-line-container {
   display: flex;
-  align-items: center
-  
+  align-items: center;
+  margin-top: 0.5rem ;
 }
 
 .product-line {
@@ -13,6 +13,14 @@
 .product-line-small {
   flex: 0.5; 
 }
+
+.element{
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0.5rem ;
+    margin-right: 0.5rem ;
+}
+
 .close-btn{
     /* Basic button styling */
   background: none;

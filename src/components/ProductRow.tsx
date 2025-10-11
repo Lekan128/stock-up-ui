@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "./TextField";
 import "./ProductRow.css";
 import { ProductRowDetail } from "../model/types";
+import TextFieldArea from "./TextAreaField";
 
 interface ProductRowProps {
   product: ProductRowDetail;
@@ -33,16 +34,16 @@ const ProductRow: React.FC<ProductRowProps> = ({
 
   return (
     <div className="product-line-container">
-      <div className="product-line-big">
-        <TextField
+      <div className="product-line-big element">
+        <TextFieldArea
           placeholder="e.g. Product 1"
           value={localProduct.name}
           onChange={(e) => updateField("name", e.target.value)}
           required
-          type="text"
+          rows={2}
         />
       </div>
-      <div className="product-line">
+      <div className="product-line element">
         <TextField
           type="number"
           placeholder="Cost price e.g. 2000"
@@ -51,7 +52,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
           required
         />
       </div>
-      <div className="product-line">
+      <div className="product-line element">
         <TextField
           type="number"
           placeholder="Selling price e.g. 2000"
@@ -60,7 +61,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
           required
         />
       </div>
-      <div className="product-line-small">
+      <div className="product-line-small element">
         <TextField
           type="number"
           placeholder="SKU"
@@ -72,7 +73,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
         />
       </div>
 
-      <button type="button" className="close-btn" onClick={onRemove}>
+      <button type="button" className="close-btn element" onClick={onRemove}>
         &times;
       </button>
     </div>

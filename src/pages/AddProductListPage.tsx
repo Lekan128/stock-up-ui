@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductRow from "../components/ProductRow";
 import { ProductRowDetail } from "../model/types";
-// import ProductRow, { ProductShort } from "./ProductRow";
+import logo from "../assets/logo.png";
+import "./AddProductListPage.css";
+import "../components/EditProductModal.css";
 
 const AddProductListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -46,33 +48,12 @@ const AddProductListPage: React.FC = () => {
     });
   };
 
-  //   const handleChange = (index: number, updated: ProductRowDetail) => {
-  //     setProducts((prev) => {
-  //       const newArr = [...prev];
-  //       newArr[index] = updated;
-
-  //       // if user typed something non-empty into the second-to-last of old array
-  //       if (index === prev.length - 2 && updated.name.trim() !== "") {
-  //         newArr.push(emptyRow()); // add 1 new row
-  //       }
-
-  //       return newArr;
-  //     });
-  //   };
-
   const handleRemove = (rowId: string) => {
     setProductRows((prev) => {
       if (prev.length <= 1) return prev;
       return prev.filter((row) => row.rowId !== rowId);
     });
   };
-
-  //   const handleRemove = (index: number) => {
-  //     setProducts((prev) => {
-  //       if (prev.length <= 1) return prev;
-  //       return prev.filter((_, i) => i !== index);
-  //     });
-  //   };
 
   const handleAdd = () => {
     setProductRows((prev) => [...prev, emptyRow()]);
@@ -89,7 +70,23 @@ const AddProductListPage: React.FC = () => {
 
   return (
     <div className="add-product-list-page">
-      <h2>Add Products</h2>
+      <img src={logo} alt="Logo" className="center-logo" />
+
+      <header className="header-container">
+        <div className="row">
+          <p className="element-charachter product-line-big">Product Name</p>
+          <p className="product-name element-charachter product-line">
+            Cost Price
+          </p>
+          <p className="product-name element-charachter product-line">
+            Selling Price
+          </p>
+          <p className="element-charachter product-line-small">SKU</p>
+          <p className="element-charachter-2"> ↓ </p>
+        </div>
+      </header>
+
+      {/* <h2>Add Products</h2> */}
       <div className="product-list-rows">
         {productRows.map((prodRow) => (
           <ProductRow
@@ -101,15 +98,23 @@ const AddProductListPage: React.FC = () => {
         ))}
       </div>
 
-      <button type="button" className="plus-btn" onClick={handleAdd}>
+      <button type="button" className="button plus-btn" onClick={handleAdd}>
         + Add Row
       </button>
 
-      <div className="bottom-buttons">
-        <button type="button" className="save-btn" onClick={handleSave}>
+      <div className="bottom-buttons modal-actions">
+        <button
+          type="button"
+          className="button save-button"
+          onClick={handleSave}
+        >
           Save
         </button>
-        <button type="button" className="cancel-btn" onClick={handleCancel}>
+        <button
+          type="button"
+          className="button cancel-button"
+          onClick={handleCancel}
+        >
           Cancel
         </button>
       </div>
