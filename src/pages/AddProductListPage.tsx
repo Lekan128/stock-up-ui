@@ -5,9 +5,14 @@ import { ProductRowDetail } from "../model/types";
 import logo from "../assets/logo.png";
 import "./AddProductListPage.css";
 import "../components/EditProductModal.css";
+import { isNullOrWhitespace } from "../utils/string-utils";
+import { useNotification } from "../contexts/NotificationContext";
+import { useLoading } from "../contexts/LoadingContext";
 
 const AddProductListPage: React.FC = () => {
   const navigate = useNavigate();
+  const { showLoading, hideLoading } = useLoading();
+  const { showNotification } = useNotification();
 
   const emptyRow = (): ProductRowDetail => ({
     rowId: crypto.randomUUID(),
@@ -60,12 +65,76 @@ const AddProductListPage: React.FC = () => {
   };
 
   const handleSave = () => {
-    const toSave = productRows.filter((p) => p.name.trim() !== "");
-    console.log("Saving these products:", toSave);
+    showLoading();
+    removeEmptyRows((filteredRow) => {
+      let errors: string[] = [];
+
+      filteredRow.forEach((row, idx) => {
+        let rowIdentifyer = "Row " + (idx + 1) + ": ";
+        if (isNullOrWhitespace(row.name)) {
+          errors.push(rowIdentifyer + "Name is required");
+        }
+        if (row.costPrice === "" || row.costPrice <= 0) {
+          errors.push(rowIdentifyer + "Cost price must be > 0");
+        }
+        if (row.sellingPrice === "" || row.sellingPrice <= 0) {
+          errors.push(rowIdentifyer + "Selling price must be > 0");
+        }
+        if (row.numberAvailable === "" || row.numberAvailable <= 0) {
+          errors.push(rowIdentifyer + "Quantity must be non-negative");
+        }
+      });
+
+      if (errors.length > 0) {
+        if (errors.length > 3) errors = errors.slice(0, 3);
+        hideLoading();
+        showNotification(errors.join("\n"), "info");
+        return;
+      }
+
+      const toSave = productRows.filter((p) => p.name.trim() !== "");
+      hideLoading();
+      console.log("Saving these products:", toSave);
+    });
   };
 
   const handleCancel = () => {
     navigate("/");
+  };
+
+  const removeEmptyRows = (
+    callback?: (filtered: ProductRowDetail[]) => void
+  ) => {
+    setProductRows((prev) => {
+      // Filter out rows that are completely empty
+      const filtered = prev.filter(
+        (row) =>
+          !(
+            isNullOrWhitespace(row.name) &&
+            row.costPrice === "" &&
+            row.sellingPrice === "" &&
+            row.numberAvailable === ""
+          )
+      );
+
+      let finalRows = filtered;
+
+      // If everything got removed, keep one empty row
+      if (filtered.length === 0) {
+        finalRows = [
+          {
+            rowId: crypto.randomUUID(),
+            name: "",
+            costPrice: "",
+            sellingPrice: "",
+            numberAvailable: "",
+          },
+        ];
+      }
+
+      if (callback) callback(finalRows);
+      return finalRows;
+    });
   };
 
   return (

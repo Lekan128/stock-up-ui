@@ -37,6 +37,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
         className={`notification ${isVisible ? "visible" : ""} ${
           notification?.type
         }`}
+        style={{ whiteSpace: "pre-wrap" }} // for it to accept multinine string
       >
         {notification?.message}
       </div>
