@@ -164,10 +164,10 @@ const ProductList = () => {
           <p className="element-charachter"> ↓ </p>
           <p className="product-name element-charachter">Products</p>
           <p
-            onClick={(_) => navigate("/addProduct")}
+            onClick={(_) => navigate("/addProductList")}
             className="element-charachter add-product-button"
           >
-            Add Product ↗
+            Add Products ↗
           </p>
         </div>
       </header>
@@ -190,6 +190,13 @@ const ProductList = () => {
       )}
 
       {!products.length && <NoProduct />}
+
+      <button
+        className="circular-button"
+        onClick={(_) => navigate("/addProduct")}
+      >
+        +
+      </button>
     </div>
   );
 };

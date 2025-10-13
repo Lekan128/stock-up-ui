@@ -17,3 +17,11 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface ProductRowDetail {
+  rowId: string; // unique identifier for the row
+  name: string;
+  costPrice: number | "";
+  sellingPrice: number | "";
+  numberAvailable: number | ""; //sku
+}

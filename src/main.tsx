@@ -11,6 +11,7 @@ import ProductList from "./pages/ProductList.tsx";
 import { LoadingProvider } from "./contexts/LoadingContext.tsx";
 import RootLayout from "./components/RootLayout.tsx";
 import { NotificationProvider } from "./contexts/NotificationContext.tsx";
+import AddProductListPage from "./pages/AddProductListPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,11 @@ const router = createBrowserRouter([
       {
         path: "/addProduct",
         element: <ProductForm />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/addProductList",
+        element: <AddProductListPage />,
         errorElement: <NotFound />,
       },
     ],
