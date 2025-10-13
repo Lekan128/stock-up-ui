@@ -104,6 +104,7 @@ const AddProductListPage: React.FC = () => {
     try {
       await axiosInstance.post(`/products/list`, productShortList);
       hideLoading();
+      setProductRows([emptyRow()]);
       navigate("/products");
     } catch (error) {
       console.error("Error submitting product:", error);

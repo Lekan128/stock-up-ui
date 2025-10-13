@@ -194,6 +194,13 @@ const ProductList = () => {
       )}
 
       {!products.length && <NoProduct />}
+
+      <button
+        className="circular-button"
+        onClick={(_) => navigate("/addProduct")}
+      >
+        +
+      </button>
     </div>
   );
 };
