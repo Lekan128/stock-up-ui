@@ -18,9 +18,8 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        // Todo: undo to element: <ProductList />,
         path: "/",
-        element: <AddProductListPage />,
+        element: <ProductList />,
         errorElement: <NotFound />,
       },
       {
@@ -41,6 +40,11 @@ const router = createBrowserRouter([
       {
         path: "/addProduct",
         element: <ProductForm />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/addProductList",
+        element: <AddProductListPage />,
         errorElement: <NotFound />,
       },
     ],

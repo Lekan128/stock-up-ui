@@ -8,6 +8,8 @@ import "../components/EditProductModal.css";
 import { isNullOrWhitespace } from "../utils/string-utils";
 import { useNotification } from "../contexts/NotificationContext";
 import { useLoading } from "../contexts/LoadingContext";
+import axiosInstance from "../utils/axiosInstance";
+import { AxiosError } from "axios";
 
 const AddProductListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -93,9 +95,30 @@ const AddProductListPage: React.FC = () => {
       }
 
       const toSave = productRows.filter((p) => p.name.trim() !== "");
-      hideLoading();
+      handleSaveToDatabase(toSave);
       console.log("Saving these products:", toSave);
     });
+  };
+
+  const handleSaveToDatabase = async (productShortList: ProductRowDetail[]) => {
+    try {
+      await axiosInstance.post(`/products/list`, productShortList);
+      hideLoading();
+      navigate("/products");
+    } catch (error) {
+      console.error("Error submitting product:", error);
+      hideLoading();
+      if (error instanceof AxiosError) {
+        showNotification(
+          "Error: " + error.response?.data.errorMessage,
+          "error"
+        );
+        return;
+      }
+      showNotification("Error: " + error, "error");
+    } finally {
+      hideLoading();
+    }
   };
 
   const handleCancel = () => {
@@ -155,7 +178,6 @@ const AddProductListPage: React.FC = () => {
         </div>
       </header>
 
-      {/* <h2>Add Products</h2> */}
       <div className="product-list-rows">
         {productRows.map((prodRow) => (
           <ProductRow
