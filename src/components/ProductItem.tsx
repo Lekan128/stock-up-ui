@@ -3,6 +3,7 @@ import "./ProductItem.css";
 import { Product } from "../model/types";
 import arrowUpIcon from "../assets/icons/arrow-up.png";
 import arrowDownIcon from "../assets/icons/arrow-down.png";
+import { renderMarkdownToHtml } from "../utils/markdownUtils";
 
 interface ProductViewProps {
   product: Product;
@@ -72,9 +73,17 @@ const ProductItem: React.FC<ProductViewProps> = ({
                 <span className="description">Available:</span>
                 <span className="value">{numberAvailable}</span>
               </div>
-              <div className="detail-row">
+              <div className="detail-row" style={{ whiteSpace: "pre-wrap" }}>
                 <span className="description">Description:</span>
-                <span className="value">{description}</span>
+                {/* <span className="value">
+                  {renderMarkdownToHtml(description)}
+                </span> */}
+                <span
+                  className="value"
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdownToHtml(description),
+                  }}
+                />
               </div>
               <div className="detail-row">
                 <span className="description">Category:</span>

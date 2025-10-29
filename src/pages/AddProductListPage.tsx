@@ -15,6 +15,7 @@ const AddProductListPage: React.FC = () => {
   const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
   const { showNotification } = useNotification();
+  const [isSaving, setIsSaving] = useState(false); // guard from duplicate save caused by strict mode
 
   const emptyRow = (): ProductRowDetail => ({
     rowId: crypto.randomUUID(),
@@ -67,8 +68,11 @@ const AddProductListPage: React.FC = () => {
   };
 
   const handleSave = () => {
+    if (isSaving) return; // guard from duplicate save caused by strict mode
+    setIsSaving(true);
+
     showLoading();
-    removeEmptyRows((filteredRow) => {
+    removeEmptyRows(async (filteredRow) => {
       let errors: string[] = [];
 
       filteredRow.forEach((row, idx) => {
@@ -95,7 +99,8 @@ const AddProductListPage: React.FC = () => {
       }
 
       const toSave = productRows.filter((p) => p.name.trim() !== "");
-      handleSaveToDatabase(toSave);
+      await handleSaveToDatabase(toSave);
+      setIsSaving(false);
       console.log("Saving these products:", toSave);
     });
   };
