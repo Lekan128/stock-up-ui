@@ -4,6 +4,7 @@ import "./EditProductModal.css";
 import TextField from "./TextField";
 import addImagePlaceHolder from "../assets/placeholders/add_image_placeholder.png";
 import { useLoading } from "../contexts/LoadingContext";
+import TextFieldArea from "./TextAreaField";
 
 interface EditProductModalProps {
   product: Product;
@@ -73,7 +74,7 @@ const EditProductModal = ({
           }
           required
         />
-        <TextField
+        <TextFieldArea
           label="Description"
           value={editedProduct.description}
           placeholder="Enter Product Details"
