@@ -75,9 +75,6 @@ const ProductItem: React.FC<ProductViewProps> = ({
               </div>
               <div className="detail-row" style={{ whiteSpace: "pre-wrap" }}>
                 <span className="description">Description:</span>
-                {/* <span className="value">
-                  {renderMarkdownToHtml(description)}
-                </span> */}
                 <span
                   className="value"
                   dangerouslySetInnerHTML={{
