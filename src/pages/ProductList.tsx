@@ -279,8 +279,18 @@ const ProductList = () => {
           >
             Add Products ↗
           </p>
+          {/* sales link moved to floating button for better UX */}
         </div>
       </header>
+
+      {/* floating sales button (near the cart) */}
+      <button
+        className="sales-floating"
+        onClick={() => navigate("/sales")}
+        aria-label="Open Sales dashboard"
+      >
+        Sales
+      </button>
 
       {products.map((product) => (
         <ProductItem

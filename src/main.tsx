@@ -12,6 +12,7 @@ import { LoadingProvider } from "./contexts/LoadingContext.tsx";
 import RootLayout from "./components/RootLayout.tsx";
 import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 import AddProductListPage from "./pages/AddProductListPage.tsx";
+import SalesDashboard from "./pages/SalesDashboard";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
       {
         path: "/addProductList",
         element: <AddProductListPage />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "/sales",
+        element: <SalesDashboard />,
         errorElement: <NotFound />,
       },
     ],
