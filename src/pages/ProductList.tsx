@@ -22,8 +22,45 @@ const ProductList = () => {
   const [cartCounts, setCartCounts] = useState<Record<string, number>>({});
   const navigate = useNavigate();
 
+  const sessionStorageKey = "salesCart";
+
+  // Load saved cartCounts from sessionStorage on initial mount
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(sessionStorageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Record<string, number>;
+        // Basic validation: ensure parsed is an object
+        if (parsed && typeof parsed === "object") {
+          setCartCounts(parsed);
+        }
+      }
+    } catch (err) {
+      // ignore parse errors and keep cartCounts empty
+      console.warn("Failed to parse saved cartCounts, clearing session", err);
+      sessionStorage.removeItem(sessionStorageKey);
+      setCartCounts({});
+    }
+    // Only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleQuantityChange = (productId: string | undefined, qty: number) => {
-    setCartCounts((prev) => ({ ...prev, [String(productId)]: qty }));
+    if (!productId) return;
+    setCartCounts((prev) => {
+      const next: Record<string, number> = { ...prev };
+      if (qty <= 0) {
+        delete next[String(productId)];
+      } else {
+        next[String(productId)] = qty;
+      }
+      try {
+        sessionStorage.setItem(sessionStorageKey, JSON.stringify(next));
+      } catch (err) {
+        console.warn("Failed to persist cartCounts to sessionStorage", err);
+      }
+      return next;
+    });
   };
 
   const handleSaveSales = async () => {
@@ -44,13 +81,21 @@ const ProductList = () => {
 
       // Clear cartCounts
       setCartCounts({});
+      try {
+        sessionStorage.removeItem(sessionStorageKey);
+      } catch (err) {
+        console.warn("Failed to remove cartCounts from sessionStorage", err);
+      }
 
       // Update product availability locally (optimistic)
       setProducts((prev) =>
         prev.map((p) => {
           const sold = cartCounts[String(p.id)] || 0;
           if (!sold) return p;
-          const newAvailable = typeof p.numberAvailable === "number" ? p.numberAvailable - sold : p.numberAvailable;
+          const newAvailable =
+            typeof p.numberAvailable === "number"
+              ? p.numberAvailable - sold
+              : p.numberAvailable;
           return { ...p, numberAvailable: newAvailable } as Product;
         })
       );
@@ -84,6 +129,29 @@ const ProductList = () => {
       .then((res) => {
         setProducts(res.data);
         hideLoading();
+
+        // Validate saved cartCounts: if any saved productId doesn't exist in fetched products,
+        // clear the saved cart to avoid conflicts between session data and DB state.
+        try {
+          const raw = sessionStorage.getItem(sessionStorageKey);
+          if (raw) {
+            const parsed = JSON.parse(raw) as Record<string, number>;
+            const ids = new Set(res.data.map((p: Product) => String(p.id)));
+            const keys = Object.keys(parsed || {});
+            const allExist = keys.every((k) => ids.has(k));
+            if (!allExist) {
+              sessionStorage.removeItem(sessionStorageKey);
+              setCartCounts({});
+            } else {
+              // ensure memory matches parsed (covers case mount-load didn't pick it up)
+              setCartCounts(parsed);
+            }
+          }
+        } catch (err) {
+          console.warn("Error validating cartCounts from sessionStorage", err);
+          sessionStorage.removeItem(sessionStorageKey);
+          setCartCounts({});
+        }
       })
       .catch((err) => {
         console.error("Error fetching products:", err);

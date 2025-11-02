@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProductItem.css";
 import { Product } from "../model/types";
 import arrowUpIcon from "../assets/icons/arrow-up.png";
@@ -36,6 +36,11 @@ const ProductItem: React.FC<ProductViewProps> = ({
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [count, setCount] = useState<number>(initialQuantity ?? 0);
+
+  // Keep local count in sync if parent updates initialQuantity (e.g. session restore or other components)
+  useEffect(() => {
+    setCount(initialQuantity ?? 0);
+  }, [initialQuantity]);
 
   const toggleExpand = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the parent onClick
