@@ -11,6 +11,7 @@ import EditProductModal from "../components/EditProductModal";
 import { useLoading } from "../contexts/LoadingContext";
 import { useNotification } from "../contexts/NotificationContext";
 import NoProduct from "../components/NoProduct";
+import SalesCart from "../components/SalesCart";
 import { AxiosError } from "axios";
 
 const ProductList = () => {
@@ -23,6 +24,42 @@ const ProductList = () => {
 
   const handleQuantityChange = (productId: string | undefined, qty: number) => {
     setCartCounts((prev) => ({ ...prev, [String(productId)]: qty }));
+  };
+
+  const handleSaveSales = async () => {
+    // Build payload from cartCounts (only > 0)
+    const payload = Object.entries(cartCounts)
+      .filter(([, qty]) => qty > 0)
+      .map(([productId, qty]) => ({ productId, quantity: qty }));
+
+    if (payload.length === 0) {
+      showNotification("No items to save", "info");
+      return;
+    }
+
+    showLoading();
+    try {
+      await axiosInstance.post("/sales/bulk", payload);
+      showNotification("Sales recorded", "success");
+
+      // Clear cartCounts
+      setCartCounts({});
+
+      // Update product availability locally (optimistic)
+      setProducts((prev) =>
+        prev.map((p) => {
+          const sold = cartCounts[String(p.id)] || 0;
+          if (!sold) return p;
+          const newAvailable = typeof p.numberAvailable === "number" ? p.numberAvailable - sold : p.numberAvailable;
+          return { ...p, numberAvailable: newAvailable } as Product;
+        })
+      );
+    } catch (err) {
+      console.error("Error saving sales", err);
+      showNotification("Error saving sales", "error");
+    } finally {
+      hideLoading();
+    }
   };
 
   useEffect(() => {
@@ -191,6 +228,13 @@ const ProductList = () => {
           onQuantityChange={(id, qty) => handleQuantityChange(id, qty)}
         />
       ))}
+
+      <SalesCart
+        cartCounts={cartCounts}
+        products={products}
+        onQuantityChange={(id, qty) => handleQuantityChange(id, qty)}
+        onSave={handleSaveSales}
+      />
 
       {editingProduct && (
         <EditProductModal
