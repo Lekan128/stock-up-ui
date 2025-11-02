@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./ProductItem.css";
 import { Product } from "../model/types";
 import arrowUpIcon from "../assets/icons/arrow-up.png";
@@ -34,13 +34,7 @@ const ProductItem: React.FC<ProductViewProps> = ({
   //   color: "black",
   // };
 
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [count, setCount] = useState<number>(initialQuantity ?? 0);
-
-  // Keep local count in sync if parent updates initialQuantity (e.g. session restore or other components)
-  useEffect(() => {
-    setCount(initialQuantity ?? 0);
-  }, [initialQuantity]);
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
   const toggleExpand = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the parent onClick
@@ -61,22 +55,18 @@ const ProductItem: React.FC<ProductViewProps> = ({
   const increment = (e: React.MouseEvent<HTMLButtonElement>) => {
     // prevent parent row/product click when pressing the qty buttons
     e.stopPropagation();
-    setCount((c) => {
-      const next = c + 1;
-      onQuantityChange?.(product.id, next);
-      return next;
-    });
+    const current = initialQuantity ?? 0;
+    const next = current + 1;
+    onQuantityChange?.(product.id, next);
   };
 
   const decrement = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setCount((c) => {
-      const next = Math.max(0, c - 1);
-      if (next !== c) {
-        onQuantityChange?.(product.id, next);
-      }
-      return next;
-    });
+    const current = initialQuantity ?? 0;
+    const next = Math.max(0, current - 1);
+    if (next !== current) {
+      onQuantityChange?.(product.id, next);
+    }
   };
 
   return (
@@ -99,7 +89,7 @@ const ProductItem: React.FC<ProductViewProps> = ({
             >
               +
             </button>
-            <div className="qty-box">{count}</div>
+            <div className="qty-box">{initialQuantity ?? 0}</div>
             <button
               className="qty-btn minus"
               onClick={decrement}

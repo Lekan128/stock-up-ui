@@ -107,10 +107,6 @@ const ProductList = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("cartCounts", cartCounts);
-  }, [cartCounts]);
-
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const [searchWord, setSearchWord] = useState<string>("");
