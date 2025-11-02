@@ -18,7 +18,16 @@ const ProductList = () => {
   const { showNotification } = useNotification();
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [cartCounts, setCartCounts] = useState<Record<string, number>>({});
   const navigate = useNavigate();
+
+  const handleQuantityChange = (productId: string | undefined, qty: number) => {
+    setCartCounts((prev) => ({ ...prev, [String(productId)]: qty }));
+  };
+
+  useEffect(() => {
+    console.log("cartCounts", cartCounts);
+  }, [cartCounts]);
 
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -178,6 +187,8 @@ const ProductList = () => {
           product={product}
           onClick={(e) => handleProductClick(e)}
           onEditClicked={(p) => setEditingProduct(p)}
+          initialQuantity={cartCounts[String(product.id)] || 0}
+          onQuantityChange={(id, qty) => handleQuantityChange(id, qty)}
         />
       ))}
 
