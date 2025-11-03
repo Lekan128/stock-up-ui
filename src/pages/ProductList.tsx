@@ -11,6 +11,7 @@ import EditProductModal from "../components/EditProductModal";
 import { useLoading } from "../contexts/LoadingContext";
 import { useNotification } from "../contexts/NotificationContext";
 import NoProduct from "../components/NoProduct";
+import SalesCart from "../components/SalesCart";
 import { AxiosError } from "axios";
 
 const ProductList = () => {
@@ -18,7 +19,93 @@ const ProductList = () => {
   const { showNotification } = useNotification();
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [cartCounts, setCartCounts] = useState<Record<string, number>>({});
   const navigate = useNavigate();
+
+  const sessionStorageKey = "salesCart";
+
+  // Load saved cartCounts from sessionStorage on initial mount
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(sessionStorageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Record<string, number>;
+        // Basic validation: ensure parsed is an object
+        if (parsed && typeof parsed === "object") {
+          setCartCounts(parsed);
+        }
+      }
+    } catch (err) {
+      // ignore parse errors and keep cartCounts empty
+      console.warn("Failed to parse saved cartCounts, clearing session", err);
+      sessionStorage.removeItem(sessionStorageKey);
+      setCartCounts({});
+    }
+    // Only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleQuantityChange = (productId: string | undefined, qty: number) => {
+    if (!productId) return;
+    setCartCounts((prev) => {
+      const next: Record<string, number> = { ...prev };
+      if (qty <= 0) {
+        delete next[String(productId)];
+      } else {
+        next[String(productId)] = qty;
+      }
+      try {
+        sessionStorage.setItem(sessionStorageKey, JSON.stringify(next));
+      } catch (err) {
+        console.warn("Failed to persist cartCounts to sessionStorage", err);
+      }
+      return next;
+    });
+  };
+
+  const handleSaveSales = async () => {
+    // Build payload from cartCounts (only > 0)
+    const payload = Object.entries(cartCounts)
+      .filter(([, qty]) => qty > 0)
+      .map(([productId, qty]) => ({ productId, quantity: qty }));
+
+    if (payload.length === 0) {
+      showNotification("No items to save", "info");
+      return;
+    }
+
+    showLoading();
+    try {
+      await axiosInstance.post("/sales/bulk", payload);
+      showNotification("Sales recorded", "success");
+
+      // Clear cartCounts
+      setCartCounts({});
+      try {
+        sessionStorage.removeItem(sessionStorageKey);
+      } catch (err) {
+        console.warn("Failed to remove cartCounts from sessionStorage", err);
+      }
+
+      // Update product availability locally (optimistic)
+      setProducts((prev) =>
+        prev.map((p) => {
+          const sold = cartCounts[String(p.id)] || 0;
+          if (!sold) return p;
+          const newAvailable =
+            typeof p.numberAvailable === "number"
+              ? p.numberAvailable - sold
+              : p.numberAvailable;
+          return { ...p, numberAvailable: newAvailable } as Product;
+        })
+      );
+    } catch (err) {
+      console.error("Error saving sales", err);
+      showNotification("Error saving sales", "error");
+    } finally {
+      hideLoading();
+    }
+  };
 
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -38,6 +125,29 @@ const ProductList = () => {
       .then((res) => {
         setProducts(res.data);
         hideLoading();
+
+        // Validate saved cartCounts: if any saved productId doesn't exist in fetched products,
+        // clear the saved cart to avoid conflicts between session data and DB state.
+        try {
+          const raw = sessionStorage.getItem(sessionStorageKey);
+          if (raw) {
+            const parsed = JSON.parse(raw) as Record<string, number>;
+            const ids = new Set(res.data.map((p: Product) => String(p.id)));
+            const keys = Object.keys(parsed || {});
+            const allExist = keys.every((k) => ids.has(k));
+            if (!allExist) {
+              sessionStorage.removeItem(sessionStorageKey);
+              setCartCounts({});
+            } else {
+              // ensure memory matches parsed (covers case mount-load didn't pick it up)
+              setCartCounts(parsed);
+            }
+          }
+        } catch (err) {
+          console.warn("Error validating cartCounts from sessionStorage", err);
+          sessionStorage.removeItem(sessionStorageKey);
+          setCartCounts({});
+        }
       })
       .catch((err) => {
         console.error("Error fetching products:", err);
@@ -169,8 +279,18 @@ const ProductList = () => {
           >
             Add Products ↗
           </p>
+          {/* sales link moved to floating button for better UX */}
         </div>
       </header>
+
+      {/* floating sales button (near the cart) */}
+      <button
+        className="sales-floating"
+        onClick={() => navigate("/sales")}
+        aria-label="Open Sales dashboard"
+      >
+        Sales
+      </button>
 
       {products.map((product) => (
         <ProductItem
@@ -178,8 +298,17 @@ const ProductList = () => {
           product={product}
           onClick={(e) => handleProductClick(e)}
           onEditClicked={(p) => setEditingProduct(p)}
+          initialQuantity={cartCounts[String(product.id)] || 0}
+          onQuantityChange={(id, qty) => handleQuantityChange(id, qty)}
         />
       ))}
+
+      <SalesCart
+        cartCounts={cartCounts}
+        products={products}
+        onQuantityChange={(id, qty) => handleQuantityChange(id, qty)}
+        onSave={handleSaveSales}
+      />
 
       {editingProduct && (
         <EditProductModal

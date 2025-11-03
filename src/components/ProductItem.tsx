@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./ProductItem.css";
 import { Product } from "../model/types";
 import arrowUpIcon from "../assets/icons/arrow-up.png";
@@ -9,12 +9,16 @@ interface ProductViewProps {
   product: Product;
   onClick: (product: Product) => void;
   onEditClicked: (product: Product) => void;
+  initialQuantity?: number;
+  onQuantityChange?: (productId: string | undefined, qty: number) => void;
 }
 
 const ProductItem: React.FC<ProductViewProps> = ({
   product,
   onClick,
   onEditClicked,
+  initialQuantity = 0,
+  onQuantityChange,
 }) => {
   const {
     imageUrl,
@@ -30,7 +34,7 @@ const ProductItem: React.FC<ProductViewProps> = ({
   //   color: "black",
   // };
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
   const toggleExpand = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the parent onClick
@@ -40,6 +44,29 @@ const ProductItem: React.FC<ProductViewProps> = ({
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onEditClicked(product);
+  };
+
+  // useEffect(() => {
+  //   // inform parent of initial value (useful if parent expects an entry)
+  //   onQuantityChange?.(product.id, count);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []); // run once on mount
+
+  const increment = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // prevent parent row/product click when pressing the qty buttons
+    e.stopPropagation();
+    const current = initialQuantity ?? 0;
+    const next = current + 1;
+    onQuantityChange?.(product.id, next);
+  };
+
+  const decrement = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    const current = initialQuantity ?? 0;
+    const next = Math.max(0, current - 1);
+    if (next !== current) {
+      onQuantityChange?.(product.id, next);
+    }
   };
 
   return (
@@ -53,12 +80,28 @@ const ProductItem: React.FC<ProductViewProps> = ({
             <p className="selling-price">₦{sellingPrice.toLocaleString()}</p>
           </div>
 
+          {/* quantity controls: plus (top), box (middle), minus (bottom) */}
+          <div className="quantity-controls">
+            <button
+              className="qty-btn plus"
+              onClick={increment}
+              aria-label="add"
+            >
+              +
+            </button>
+            <div className="qty-box">{initialQuantity ?? 0}</div>
+            <button
+              className="qty-btn minus"
+              onClick={decrement}
+              aria-label="remove"
+            >
+              −
+            </button>
+          </div>
+
           <button className="expand-button" onClick={toggleExpand}>
             <img src={isExpanded ? arrowUpIcon : arrowDownIcon} />
           </button>
-
-          {/* <p className="product-name element-space">{name}</p>
-          <p className="element-space">{sellingPrice}</p> */}
         </div>
         {isExpanded && (
           <div className="expanded-content">
