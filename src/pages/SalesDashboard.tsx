@@ -152,22 +152,25 @@ const SalesDashboard: React.FC = () => {
     <div className="sales-dashboard main-container">
       <header className="sales-header">
         <div className="controls">
-          <label className={activeTab === "stock" ? "hidden" : ""}>
-            From
-            <input
-              type="datetime-local"
-              value={from ?? ""}
-              onChange={(e) => setFrom(e.target.value || null)}
-            />
-          </label>
-          <label className={activeTab === "stock" ? "hidden" : ""}>
-            To
-            <input
-              type="datetime-local"
-              value={to ?? ""}
-              onChange={(e) => setTo(e.target.value || null)}
-            />
-          </label>
+          <div className="date-controls">
+            <label className={activeTab === "stock" ? "hidden" : ""}>
+              From
+              <input
+                type="datetime-local"
+                value={from ?? ""}
+                onChange={(e) => setFrom(e.target.value || null)}
+              />
+            </label>
+            <label className={activeTab === "stock" ? "hidden" : ""}>
+              To
+              <input
+                type="datetime-local"
+                value={to ?? ""}
+                onChange={(e) => setTo(e.target.value || null)}
+              />
+            </label>
+          </div>
+
           <button onClick={() => fetchSummary()} className="small">
             Refresh Summary
           </button>
