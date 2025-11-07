@@ -7,6 +7,7 @@ import axiosInstance from "../utils/axiosInstance";
 import logo from "../assets/logo.png";
 import seatchIcon from "../assets/icons/search.png";
 import TextField from "../components/TextField";
+import ChatInterface from "../components/ChatInterface";
 import EditProductModal from "../components/EditProductModal";
 import { useLoading } from "../contexts/LoadingContext";
 import { useNotification } from "../contexts/NotificationContext";
@@ -108,7 +109,7 @@ const ProductList = () => {
   };
 
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [searchWord, setSearchWord] = useState<string>("");
   const handleProductClick = (product: Product) => {
     //Todo: undo
@@ -283,14 +284,33 @@ const ProductList = () => {
         </div>
       </header>
 
-      {/* floating sales button (near the cart) */}
-      <button
-        className="sales-floating"
-        onClick={() => navigate("/sales")}
-        aria-label="Open Sales dashboard"
-      >
-        Sales
-      </button>
+      {/* Floating buttons (hidden when chat is open to avoid overlap on mobile) */}
+      {!isChatOpen && (
+        <>
+          <button
+            className="sales-floating"
+            onClick={() => navigate("/sales")}
+            aria-label="Open Sales dashboard"
+          >
+            Sales
+          </button>
+
+          <button
+            className="chat-floating"
+            onClick={() => setIsChatOpen(true)}
+            aria-label="Open AI Chat"
+          >
+            💬
+          </button>
+
+          <button
+            className="circular-button"
+            onClick={(_) => navigate("/addProduct")}
+          >
+            +
+          </button>
+        </>
+      )}
 
       {products.map((product) => (
         <ProductItem
@@ -320,12 +340,7 @@ const ProductList = () => {
 
       {!products.length && <NoProduct />}
 
-      <button
-        className="circular-button"
-        onClick={(_) => navigate("/addProduct")}
-      >
-        +
-      </button>
+      {isChatOpen && <ChatInterface onClose={() => setIsChatOpen(false)} />}
     </div>
   );
 };
