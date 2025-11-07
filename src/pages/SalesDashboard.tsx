@@ -218,7 +218,7 @@ const SalesDashboard: React.FC = () => {
             {summary ? (
               <div className="summary-cards">
                 <div className="card">
-                  <div className="label">Total Quantity</div>
+                  <div className="label">Total Sales Quantity</div>
                   <div className="value">{summary.totalQuantity}</div>
                 </div>
                 <div className="card">

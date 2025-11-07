@@ -3,6 +3,7 @@ import './ChatInterface.css';
 import { ChatMessage, Role } from '../model/chat';
 import axiosInstance from '../utils/axiosInstance';
 import { useNotification } from '../contexts/NotificationContext';
+import { renderMarkdownToHtml } from '../utils/markdownUtils';
 
 interface ChatInterfaceProps {
     onClose: () => void;
@@ -89,7 +90,11 @@ const ChatInterface = ({ onClose }: ChatInterfaceProps) => {
 
     const sendToBackend = async (text: string, placeholderId: string) => {
         try {
-            const response = await axiosInstance.post('/chat', text);
+            const response = await axiosInstance.post('/chat', text, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             // update placeholder message with actual content
             setMessages((prev) =>
                 prev.map((m) =>
@@ -185,12 +190,15 @@ const ChatInterface = ({ onClose }: ChatInterfaceProps) => {
                             }
                         }}
                     >
-                        <div className="message-content">
-                            {message.content}
-                            {message.status === 'error' && (
-                                <div className="retry-hint">Tap to retry</div>
-                            )}
-                        </div>
+                        <div 
+                            className="message-content"
+                            dangerouslySetInnerHTML={{
+                                __html: renderMarkdownToHtml(message.content)
+                            }}
+                        />
+                        {message.status === 'error' && (
+                            <div className="retry-hint">Tap to retry</div>
+                        )}
                     </div>
                 ))}
                 
