@@ -62,3 +62,16 @@ input{
     color: #666;
     margin-top: 0.25rem;
 }
+
+/* for text area */
+.textarea-input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  /* outline: none; */
+  resize: vertical; /* allow vertical resizing, or set to none if you want fixed */
+  overflow: auto;
+}
