@@ -16,6 +16,7 @@ interface TextFieldProps {
   required?: boolean;
   name?: string;
   accept?: string;
+  fontSize?: string;
 }
 
 const TextField: React.FC<TextFieldProps> = ({
@@ -31,7 +32,12 @@ const TextField: React.FC<TextFieldProps> = ({
   required = false, //for field needed before submit
   name = "", //for e.target.name
   accept = "", //for input, input's accept
+  fontSize = "1rem",
 }) => {
+  const inputStyle = {
+    fontSize: `${fontSize}`, // React inline styles use camelCase properties
+  };
+
   return (
     <div className="text-field-wrapper">
       {label && <label className="text-field-label">{label}</label>}
@@ -49,6 +55,7 @@ const TextField: React.FC<TextFieldProps> = ({
           required={required}
           name={name}
           accept={accept}
+          style={inputStyle}
         />
 
         {rightImgSrc ? (

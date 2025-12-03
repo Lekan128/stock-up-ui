@@ -50,6 +50,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
           value={localProduct.costPrice.toString()}
           onChange={(e) => updateField("costPrice", Number(e.target.value))}
           required
+          fontSize="0.85rem"
         />
       </div>
       <div className="product-line element">
@@ -59,6 +60,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
           value={localProduct.sellingPrice.toString()}
           onChange={(e) => updateField("sellingPrice", Number(e.target.value))}
           required
+          fontSize="0.85rem"
         />
       </div>
       <div className="product-line-small element">
@@ -70,6 +72,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
             updateField("numberAvailable", Number(e.target.value))
           }
           required
+          fontSize="0.85rem"
         />
       </div>
 

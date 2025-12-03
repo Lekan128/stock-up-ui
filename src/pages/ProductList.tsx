@@ -304,7 +304,7 @@ const ProductList = () => {
           </button>
 
           <button
-            className="circular-button"
+            className="add-single-product-floating"
             onClick={(_) => navigate("/addProduct")}
           >
             +
