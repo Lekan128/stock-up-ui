@@ -40,3 +40,10 @@
   width: min-content;  /* Ensure width only fits content */
   text-align: center;
 }
+
+@media screen and (max-width: 600px) {
+  .element{
+    margin-left: 0.2rem ;
+    margin-right: 0.2rem ;
+}
+}
