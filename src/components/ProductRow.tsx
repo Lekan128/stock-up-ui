@@ -45,31 +45,41 @@ const ProductRow: React.FC<ProductRowProps> = ({
       </div>
       <div className="product-line element">
         <TextField
-          type="number"
+          type="number-with-comma"
           placeholder="Cost price e.g. 2000"
           value={localProduct.costPrice.toString()}
-          onChange={(e) => updateField("costPrice", Number(e.target.value))}
+          onChange={(e) =>
+            updateField("costPrice", Number(e.target.value.replace(/,/g, "")))
+          }
           required
           fontSize="0.85rem"
         />
       </div>
       <div className="product-line element">
         <TextField
-          type="number"
+          type="number-with-comma"
           placeholder="Selling price e.g. 2000"
           value={localProduct.sellingPrice.toString()}
-          onChange={(e) => updateField("sellingPrice", Number(e.target.value))}
+          onChange={(e) =>
+            updateField(
+              "sellingPrice",
+              Number(e.target.value.replace(/,/g, ""))
+            )
+          }
           required
           fontSize="0.85rem"
         />
       </div>
       <div className="product-line-small element">
         <TextField
-          type="number"
+          type="number-with-comma"
           placeholder="SKU"
           value={localProduct.numberAvailable.toString()}
           onChange={(e) =>
-            updateField("numberAvailable", Number(e.target.value))
+            updateField(
+              "numberAvailable",
+              Number(e.target.value.replace(/,/g, ""))
+            )
           }
           required
           fontSize="0.85rem"
